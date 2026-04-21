@@ -7,9 +7,10 @@ interface Props {
   setLocation: (e: React.FormEvent) => void
   data: Weather | null
   forecast: ForecastItem[]
+  error:string
 }
 
-const Display = ({ city, setCity, setLocation, data, forecast }: Props) => {
+const Display = ({ city, setCity, setLocation, data, forecast, error }: Props) => {
   const now = new Date()
   const time = now.toLocaleTimeString([], {
     hour: '2-digit',
@@ -44,7 +45,7 @@ const Display = ({ city, setCity, setLocation, data, forecast }: Props) => {
           />
           <button type="submit">Search</button>
         </form>
-
+        {error && <p className="error-text">{error}</p>}
         {data ? (
           <>
             <div className="main-grid">
