@@ -272,3 +272,14 @@ input {
     font-size: 3.2rem;
   }
 }
+
+
+.loading-text {
+  margin-bottom: 16px;
+  padding: 10px 14px;
+  border-radius: 12px;
+  background: rgba(59, 130, 246, 0.12);
+  border: 1px solid rgba(59, 130, 246, 0.25);
+  color: #93c5fd;
+  text-align: center;
+}

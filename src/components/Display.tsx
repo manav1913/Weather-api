@@ -4,13 +4,22 @@ import type { ForecastItem, Weather } from '../Model'
 interface Props {
   city: string
   setCity: React.Dispatch<React.SetStateAction<string>>
-  setLocation: (e: React.FormEvent) => void
+  setLocation: (e: React.FormEvent<HTMLFormElement>) => void
   data: Weather | null
   forecast: ForecastItem[]
   error: string
+  isLoading: boolean
 }
 
-const Display = ({ city, setCity, setLocation, data, forecast, error }: Props) => {
+const Display = ({
+  city,
+  setCity,
+  setLocation,
+  data,
+  forecast,
+  error,
+  isLoading,
+}: Props) => {
   const now = new Date()
 
   const localTime = now.toLocaleTimeString([], {
@@ -18,11 +27,11 @@ const Display = ({ city, setCity, setLocation, data, forecast, error }: Props) =
     minute: '2-digit',
   })
 
-  const localDate = now.toLocaleDateString("en-US", {
-    weekday: "long",
-    day: "numeric",
-    month: "short",
-    year: "numeric",
+  const localDate = now.toLocaleDateString('en-US', {
+    weekday: 'long',
+    day: 'numeric',
+    month: 'short',
+    year: 'numeric',
   })
 
   const cityDateObj = data
@@ -34,11 +43,11 @@ const Display = ({ city, setCity, setLocation, data, forecast, error }: Props) =
     minute: '2-digit',
   })
 
-  const cityDate = cityDateObj.toLocaleDateString("en-US", {
-    weekday: "long",
-    day: "numeric",
-    month: "short",
-    year: "numeric",
+  const cityDate = cityDateObj.toLocaleDateString('en-US', {
+    weekday: 'long',
+    day: 'numeric',
+    month: 'short',
+    year: 'numeric',
   })
 
   return (
@@ -62,17 +71,27 @@ const Display = ({ city, setCity, setLocation, data, forecast, error }: Props) =
             type="text"
             placeholder="Search city..."
           />
-          <button type="submit">Search</button>
+          <button type="submit" disabled={isLoading}>
+            {isLoading ? 'Loading...' : 'Search'}
+          </button>
         </form>
 
         {error && <p className="error-text">{error}</p>}
 
-        {data ? (
+        {isLoading ? (
+          <div className="empty-state">
+            <h3>Loading...</h3>
+            <p>Please wait while weather data is being fetched.</p>
+          </div>
+        ) : data ? (
           <>
             <div className="main-grid">
               <div className="hero-card">
                 <div className="hero-left">
-                  <h3 className="city-name">{data.name}</h3>
+                  <h3 className="city-name">
+                    {data.name}
+                    {data.sys?.country ? `, ${data.sys.country}` : ''}
+                  </h3>
                   <p className="weather-type">{data.weather[0].description}</p>
                   <h1 className="big-temp">{Math.round(data.main.temp)}°C</h1>
                   <p className="feels-like">
@@ -126,8 +145,12 @@ const Display = ({ city, setCity, setLocation, data, forecast, error }: Props) =
                       alt={item.weather[0].description}
                     />
 
-                    <p className="forecast-temp">{Math.round(item.main.temp)}°C</p>
-                    <p className="forecast-desc">{item.weather[0].description}</p>
+                    <p className="forecast-temp">
+                      {Math.round(item.main.temp)}°C
+                    </p>
+                    <p className="forecast-desc">
+                      {item.weather[0].description}
+                    </p>
                   </div>
                 ))}
               </div>

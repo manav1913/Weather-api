@@ -56,7 +56,7 @@ fetchWeather(city)
 
   return (
     <div>
-      <Display city={city} setCity={setCity} setLocation={setLocation} data={data} forecast={forecast} error={error}/>
+      <Display city={city} setCity={setCity} setLocation={setLocation} data={data} forecast={forecast} error={error} isLoading={isLoading}/>
     </div>
   )
 }
