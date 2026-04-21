@@ -9,10 +9,12 @@ const App = () => {
   const [city, setCity] = useState<string>("")
   const [error, setError] = useState<string>("")
   const [forecast, setForecast] = useState<ForecastItem[]>([])
+  const [isLoading, setIsLoading] = useState<boolean>(false)
 
   const apiKey = import.meta.env.VITE_WEATHER_API_KEY
 
    const fetchWeather = async (cityName:string)=>{
+    setIsLoading(true)
    try {
     setError("")
 
@@ -31,6 +33,8 @@ const App = () => {
     setData(null)
     setForecast([])
     console.log(error)
+  }finally{
+    setIsLoading(false)
   }
 }
 
