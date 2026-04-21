@@ -17,3 +17,19 @@ export interface Weather {
     speed: number;
   };
 }
+
+export interface ForecastItem {
+    dt: number
+  dt_txt: string
+  main: {
+    temp: number
+  }
+  weather: {
+    description: string
+    icon: string
+  }[]
+}
+
+export interface ForecastResponse {
+  list: ForecastItem[]
+}
