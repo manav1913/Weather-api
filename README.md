@@ -3,6 +3,8 @@
 A modern and responsive weather application built using React, TypeScript, and OpenWeather API.
 It provides real-time weather data, forecast details, and timezone-based city time with a clean and premium UI.
 
+#live link https://weather-api-omega-cyan.vercel.app/
+
 # Features
 Search weather by city name
 Current weather details (temperature, humidity, wind, feels like)
