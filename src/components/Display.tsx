@@ -28,7 +28,7 @@ const Display = ({
   })
 
   const localDate = now.toLocaleDateString('en-US', {
-    weekday: 'long',
+    weekday: 'short',
     day: 'numeric',
     month: 'short',
     year: 'numeric',
