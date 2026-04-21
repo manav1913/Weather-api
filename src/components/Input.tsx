@@ -1,6 +1,11 @@
 import React from 'react'
 
-const Input = () => {
+interface Props{
+    city:string
+    setCity:React.Dispatch<React.SetStateAction<string>>
+}
+
+const Input = ({city, setCity}:Props) => {
 
 
 
@@ -9,7 +14,11 @@ const Input = () => {
     <div>
       <form>
 
-        <input type="text" placeholder='Search City' />
+        <input
+        value={city}
+        
+         type="text" 
+         placeholder='Search City' />
         <button>Search</button>
 
       </form>
