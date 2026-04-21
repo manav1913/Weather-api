@@ -11,11 +11,21 @@ interface Props {
 
 const Display = ({ city, setCity, setLocation, data, forecast }: Props) => {
 
-
+  const now = new Date()
+  const time = now.toLocaleTimeString()
+  const day = new Date().toLocaleString("en-US", { weekday: "long" })
+  const date = now.getDate()
+  const month = new Date().toLocaleString("en-US", { month: "short" })
+  const year = now.getFullYear()
 
 
   return (
     <div>
+      <div>
+        <h4>{time}</h4>
+        <p>{day},{date} {month} {year}</p>
+
+      </div>
       <form onSubmit={setLocation}>
 
         <input
