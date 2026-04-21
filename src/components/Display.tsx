@@ -10,55 +10,114 @@ interface Props {
 }
 
 const Display = ({ city, setCity, setLocation, data, forecast }: Props) => {
-
   const now = new Date()
-  const time = now.toLocaleTimeString()
-  const day = new Date().toLocaleString("en-US", { weekday: "long" })
+  const time = now.toLocaleTimeString([], {
+    hour: '2-digit',
+    minute: '2-digit',
+  })
+  const day = now.toLocaleString("en-US", { weekday: "long" })
   const date = now.getDate()
-  const month = new Date().toLocaleString("en-US", { month: "short" })
+  const month = now.toLocaleString("en-US", { month: "short" })
   const year = now.getFullYear()
 
-
   return (
-    <div>
-      <div>
-        <h4>{time}</h4>
-        <p>{day},{date} {month} {year}</p>
+    <div className="app">
+      <div className="weather-shell">
+        <div className="top-row">
+          <div className="brand">
+            <span>Weather Forecast</span>
+            
+          </div>
 
-      </div>
-      <form onSubmit={setLocation}>
+          <div className="time-box">
+            <h4>{time}</h4>
+            <p>{day}, {date} {month} {year}</p>
+          </div>
+        </div>
 
-        <input
-          value={city}
-          onChange={(e) => {
-            setCity(e.target.value)
-          }}
-          type="text"
-          placeholder='Search City' />
-        <button>Search</button>
-
-      </form>
-      <div>
-        {data && (
-          <>
-            <h3>{data.name}</h3>
-            <h4>{data.main.temp}°C</h4>
-            <h5>{data.wind?.speed}</h5>
-            <p>{data.weather[0].description}</p>
-            <img src={`https://openweathermap.org/img/wn/${data.weather?.[0]?.icon}@2x.png`} alt="" />
-          </>
-        )}
-      </div>
-      <div>
-        {forecast.map((item) => <div key={item.dt}>
-          <p>{item.dt_txt}</p>
-          <p>{item.main.temp}°C</p>
-          <p>{item.weather[0].description}</p>
-          <img
-            src={`https://openweathermap.org/img/wn/${item.weather[0].icon}@2x.png`}
-            alt="forecast icon"
+        <form className="search-form" onSubmit={setLocation}>
+          <input
+            value={city}
+            onChange={(e) => setCity(e.target.value)}
+            type="text"
+            placeholder="Search city..."
           />
-        </div>)}
+          <button type="submit">Search</button>
+        </form>
+
+        {data ? (
+          <>
+            <div className="main-grid">
+              <div className="hero-card">
+                <div className="hero-left">
+                  <h3 className="city-name">{data.name}</h3>
+                  <p className="weather-type">{data.weather[0].description}</p>
+                  <h1 className="big-temp">{Math.round(data.main.temp)}°C</h1>
+                  <p className="feels-like">
+                    Feels like {Math.round(data.main.feels_like)}°C
+                  </p>
+                </div>
+
+                <div className="hero-icon">
+                  <img
+                    src={`https://openweathermap.org/img/wn/${data.weather[0].icon}@4x.png`}
+                    alt={data.weather[0].description}
+                  />
+                </div>
+              </div>
+
+              <div className="stats-card">
+                <div className="stat-box">
+                  <p className="stat-label">Humidity</p>
+                  <h4 className="stat-value">{data.main.humidity}%</h4>
+                </div>
+
+                <div className="stat-box">
+                  <p className="stat-label">Wind Speed</p>
+                  <h4 className="stat-value">{data.wind?.speed} m/s</h4>
+                </div>
+
+                <div className="stat-box">
+                  <p className="stat-label">Condition</p>
+                  <h4 className="stat-value">{data.weather[0].main}</h4>
+                </div>
+              </div>
+            </div>
+
+            <div className="forecast-section">
+              <div className="forecast-header">
+                <h3>Upcoming Forecast</h3>
+                
+              </div>
+
+              <div className="forecast-grid">
+                {forecast.map((item) => (
+                  <div className="forecast-card" key={item.dt}>
+                    <p className="forecast-hour">
+                      {new Date(item.dt_txt).toLocaleTimeString([], {
+                        hour: '2-digit',
+                        minute: '2-digit',
+                      })}
+                    </p>
+
+                    <img
+                      src={`https://openweathermap.org/img/wn/${item.weather[0].icon}@2x.png`}
+                      alt={item.weather[0].description}
+                    />
+
+                    <p className="forecast-temp">{Math.round(item.main.temp)}°C</p>
+                    <p className="forecast-desc">{item.weather[0].description}</p>
+                  </div>
+                ))}
+              </div>
+            </div>
+          </>
+        ) : (
+          <div className="empty-state">
+            <h3>Search a city to begin</h3>
+            <p>Get current weather and elegant forecast cards instantly.</p>
+          </div>
+        )}
       </div>
     </div>
   )
