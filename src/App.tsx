@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import React, {  useEffect, useState } from 'react'
 import axios from 'axios'
 import type { Weather, ForecastItem, ForecastResponse } from './Model'
 import './App.css'
@@ -12,20 +12,16 @@ const App = () => {
 
   const apiKey = import.meta.env.VITE_WEATHER_API_KEY
 
- const setLocation = async (e: React.FormEvent) => {
-  e.preventDefault()
-
-  if (!city.trim()) return
-
-  try {
+   const fetchWeather = async (cityName:string)=>{
+   try {
     setError("")
 
     const currentRes = await axios.get<Weather>(
-      `https://api.openweathermap.org/data/2.5/weather?q=${city}&appid=${apiKey}&units=metric`
+      `https://api.openweathermap.org/data/2.5/weather?q=${cityName}&appid=${apiKey}&units=metric`
     )
 
     const forecastRes = await axios.get<ForecastResponse>(
-      `https://api.openweathermap.org/data/2.5/forecast?q=${city}&appid=${apiKey}&units=metric`
+      `https://api.openweathermap.org/data/2.5/forecast?q=${cityName}&appid=${apiKey}&units=metric`
     )
 
     setData(currentRes.data)
@@ -37,10 +33,23 @@ const App = () => {
     console.log(error)
   }
 }
+
+ const setLocation = async (e: React.FormEvent) => {
+  e.preventDefault()
+
+  if (!city.trim()) return
+
+
+fetchWeather(city)
+ }
+
+ useEffect(()=>{
+  fetchWeather("New York")
+ },[])
  
 
 
-console.log(data)
+
   return (
     <div>
       <Display city={city} setCity={setCity} setLocation={setLocation} data={data} forecast={forecast} error={error}/>
