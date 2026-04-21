@@ -7,19 +7,39 @@ interface Props {
   setLocation: (e: React.FormEvent) => void
   data: Weather | null
   forecast: ForecastItem[]
-  error:string
+  error: string
 }
 
 const Display = ({ city, setCity, setLocation, data, forecast, error }: Props) => {
   const now = new Date()
-  const time = now.toLocaleTimeString([], {
+
+  const localTime = now.toLocaleTimeString([], {
     hour: '2-digit',
     minute: '2-digit',
   })
-  const day = now.toLocaleString("en-US", { weekday: "long" })
-  const date = now.getDate()
-  const month = now.toLocaleString("en-US", { month: "short" })
-  const year = now.getFullYear()
+
+  const localDate = now.toLocaleDateString("en-US", {
+    weekday: "long",
+    day: "numeric",
+    month: "short",
+    year: "numeric",
+  })
+
+  const cityDateObj = data
+    ? new Date((data.dt + data.timezone) * 1000)
+    : now
+
+  const cityTime = cityDateObj.toLocaleTimeString([], {
+    hour: '2-digit',
+    minute: '2-digit',
+  })
+
+  const cityDate = cityDateObj.toLocaleDateString("en-US", {
+    weekday: "long",
+    day: "numeric",
+    month: "short",
+    year: "numeric",
+  })
 
   return (
     <div className="app">
@@ -27,12 +47,11 @@ const Display = ({ city, setCity, setLocation, data, forecast, error }: Props) =
         <div className="top-row">
           <div className="brand">
             <span>Weather Forecast</span>
-            
           </div>
 
           <div className="time-box">
-            <h4>{time}</h4>
-            <p>{day}, {date} {month} {year}</p>
+            <h4>{data ? cityTime : localTime}</h4>
+            <p>{data ? cityDate : localDate}</p>
           </div>
         </div>
 
@@ -45,7 +64,9 @@ const Display = ({ city, setCity, setLocation, data, forecast, error }: Props) =
           />
           <button type="submit">Search</button>
         </form>
+
         {error && <p className="error-text">{error}</p>}
+
         {data ? (
           <>
             <div className="main-grid">
@@ -88,7 +109,6 @@ const Display = ({ city, setCity, setLocation, data, forecast, error }: Props) =
             <div className="forecast-section">
               <div className="forecast-header">
                 <h3>Upcoming Forecast</h3>
-                
               </div>
 
               <div className="forecast-grid">

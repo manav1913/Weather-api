@@ -1,5 +1,7 @@
 export interface Weather {
   name: string;
+  dt:number
+  timezone:number
 
   weather: {
     main: string;
